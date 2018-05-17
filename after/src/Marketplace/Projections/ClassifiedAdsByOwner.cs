@@ -23,7 +23,7 @@ namespace Marketplace.Projections
                 switch (e)
                 {
                     case Events.V1.ClassifiedAdCreated x:
-                        var id = DocumentId(x.Id);
+                        var id = DocumentId(x.Owner);
 
                         var doc = await session.LoadAsync<ClassifiedAdsByOwnerDocument>(id);                    
                         if (doc == null)

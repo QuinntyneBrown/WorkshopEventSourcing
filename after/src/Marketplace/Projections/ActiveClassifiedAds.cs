@@ -33,11 +33,13 @@ namespace Marketplace.Projections
 
                     case Events.V1.ClassifiedAdRenamed x:
                         doc = await session.LoadAsync<ActiveClassifiedAdDocument>(DocumentId(x.Id));
+                        if (doc == null) return;
                         doc.Title = x.Title;
                         break;
 
                     case Events.V1.ClassifiedAdPriceChanged x:
                         doc = await session.LoadAsync<ActiveClassifiedAdDocument>(DocumentId(x.Id));
+                        if (doc == null) return;
                         doc.Price = x.Price;
                         break;
 

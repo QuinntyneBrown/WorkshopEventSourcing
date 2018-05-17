@@ -9,6 +9,8 @@ using Marketplace.Framework.Logging;
 
 namespace Marketplace.Framework
 {
+    using static String;
+
     public class GesAggregateStore : IAggregateStore
     {
         private const int MaxReadSize = 4096;
@@ -111,5 +113,19 @@ namespace Marketplace.Framework
                 result.LogPosition.PreparePosition);
         }
 
+        /// <summary>
+        ///     Returns the last version of the aggregate, if found.
+        /// </summary>
+        public async Task<long> GetLastVersionOf<T>(string aggregateId, CancellationToken cancellationToken = default)
+            where T : Aggregate
+        {
+            if (IsNullOrWhiteSpace(aggregateId))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(aggregateId));
+
+            var page = await _connection.ReadStreamEventsBackwardAsync(
+                _getStreamName(typeof(T), aggregateId), long.MaxValue, 1, false, _userCredentials);
+
+            return page.LastEventNumber;
+        }
     }
 }

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Marketplace.Domain.ClassifiedAds;
 using Marketplace.Framework;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Diagnostics;
 using Raven.Client.Documents.Session;
 
 namespace Marketplace.Projections
@@ -37,11 +34,13 @@ namespace Marketplace.Projections
 
                     case Events.V1.ClassifiedAdRenamed x:
                         doc = await session.LoadAsync<AdAwaitingActivation>(DocumentId(x.Id));
+                        if (doc == null) return;
                         doc.Title = x.Title;
                         break;
 
                     case Events.V1.ClassifiedAdTextUpdated x:
                         doc = await session.LoadAsync<AdAwaitingActivation>(DocumentId(x.Id));
+                        if (doc == null) return;
                         doc.Text = x.AdText;
                         break;
 
