@@ -5,6 +5,7 @@ namespace Marketplace.Domain.ClassifiedAds
 {
     public class ClassifiedAd : Aggregate
     {
+        private Guid _owner;
         private bool _isPublished;
         private bool _sold;
         private Title _title;
@@ -17,6 +18,7 @@ namespace Marketplace.Domain.ClassifiedAds
             {
                 case Events.V1.ClassifiedAdCreated x:
                     Id = x.Id;
+                    _owner = x.Owner;
                     _title = x.Title;
                     break;
 
@@ -63,6 +65,7 @@ namespace Marketplace.Domain.ClassifiedAds
             Apply(new Events.V1.ClassifiedAdRenamed
             {
                 Id = Id,
+                Owner = _owner,
                 Title = title,
                 RenamedAt = renamedAt,
                 RenamedBy = renamedBy
@@ -73,6 +76,7 @@ namespace Marketplace.Domain.ClassifiedAds
             Apply(new Events.V1.ClassifiedAdTextUpdated
             {
                 Id = Id,
+                Owner = _owner,
                 AdText = text,
                 TextUpdatedAt = updatedAt,
                 TextUpdatedBy = updatedBy
@@ -82,6 +86,7 @@ namespace Marketplace.Domain.ClassifiedAds
             Apply(new Events.V1.ClassifiedAdPriceChanged
             {
                 Id = Id,
+                Owner = _owner,
                 Price = price,
                 PriceChangedAt = changedAt,
                 PriceChangedBy = changedBy
