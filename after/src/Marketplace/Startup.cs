@@ -38,6 +38,7 @@ namespace Marketplace
                 new JsonNetSerializer(),
                 typeMapper
             ));
+            services.AddScoped<ClassifiedAdsApplicationService>();
 
             var openSession = ConfgiureRavenDb();
 
